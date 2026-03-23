@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
   res.send("API Running");
 });
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: ["http://localhost:5173", "https://patakarogo.netlify.app"],
   credentials: true
 }));
 
