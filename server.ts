@@ -3,43 +3,51 @@ dotenv.config();
 
 import express from "express";
 import cors from "cors";
-import { connectDB } from "./config/db";
-import apiRoutes from "./routes/apiRoutes";
 import session from "express-session";
 import passport from "passport";
-import "./config/passport";
+
+import { connectDB } from "./config/db";
+import apiRoutes from "./routes/apiRoutes";
 import authRoutes from "./routes/authRoutes";
+import "./config/passport";
 
 const app = express();
 
-app.use(cors());
+/* Middlewares */
 app.use(express.json());
 
 app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://patakarogo.netlify.app"],
+    credentials: true
+  })
+);
+
+app.use(
   session({
-    secret: process.env.SESSION_SECRET!,
+    secret: process.env.SESSION_SECRET || "secret",
     resave: false,
     saveUninitialized: false
   })
 );
 
-app.use("/api", apiRoutes);
-connectDB();
-app.use("/auth", authRoutes);
-app.get("/", (req, res) => {
-  res.send("API Running");
-});
-app.use(cors({
-  origin: ["http://localhost:5173", "https://patakarogo.netlify.app"],
-  credentials: true
-}));
-
-
+/* Passport */
 app.use(passport.initialize());
 app.use(passport.session());
 
+/* Database */
+connectDB();
 
-const PORT = process.env.PORT || 10000;
+/* Routes */
+app.use("/api", apiRoutes);
+app.use("/auth", authRoutes);
+
+app.get("/", (req, res) => {
+  res.send("PataKaro Backend Running 🚀");
+});
+
+/* Server */
+const PORT = Number(process.env.PORT) || 10000;
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
