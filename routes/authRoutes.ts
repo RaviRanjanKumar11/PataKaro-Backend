@@ -15,7 +15,7 @@ router.get(
   }),
   (req, res) => {
    // res.send("Google Login Successful");
-    res.redirect("http://localhost:5173/dashboard");
+    res.redirect("https://patakaro.vercel.app/dashboard");
   }
 );
 
