@@ -18,7 +18,9 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://patakarogo.netlify.app"],
+    origin: ["http://localhost:5173",
+       "https://patakarogo.netlify.app",
+      "https://pata-karo-frontend.vercel.app"],
     credentials: true
   })
 );

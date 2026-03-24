@@ -15,7 +15,7 @@ router.get(
   }),
   (req, res) => {
    // res.send("Google Login Successful");
-    res.redirect("https://patakaro.vercel.app/dashboard");
+    res.redirect("https://pata-karo-frontend.vercel.app");
   }
 );
 
