@@ -8,3 +8,5 @@ export const fetchIfscDetails = async (ifsc: string) => {
 
   return response.data;
 };
+
+
