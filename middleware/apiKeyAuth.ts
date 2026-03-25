@@ -37,11 +37,17 @@ export const apiKeyAuth = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-
-export const getCurrentUser = async (req: Request, res: Response) => {
+export const getCurrentUser = async (req: any, res: Response) => {
 
   if (!req.user) {
     return res.status(401).json({ message: "Not logged in" });
   }
-  res.json(req.user);
+
+  res.json({
+    id: req.user._id,
+    name: req.user.name,
+    email: req.user.email,
+    apiKey: req.user.apiKey,
+    plan: req.user.plan
+  });
 };
