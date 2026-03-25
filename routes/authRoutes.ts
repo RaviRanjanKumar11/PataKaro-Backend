@@ -20,14 +20,7 @@ router.get(
 );
 
 
-router.get("/logout", (req, res) => {
-  req.logout(() => {
-    req.session.destroy(() => {
-      res.clearCookie("connect.sid");
-      res.json({ message: "Logged out" });
-    });
-  });
-});
+
 
 export default router;
 
