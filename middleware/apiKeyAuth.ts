@@ -2,8 +2,10 @@ import { Request, Response, NextFunction } from "express";
 import User from "../models/User";
 
 export const apiKeyAuth = async (req: Request, res: Response, next: NextFunction) => {
+  console.log("API KEY HEADER:", req.headers["x-api-key"]);
   try {
     const apiKeyHeader = req.headers["x-api-key"];
+    
 
     if (!apiKeyHeader) {
       return res.status(401).json({ message: "API key required" });
@@ -17,7 +19,7 @@ export const apiKeyAuth = async (req: Request, res: Response, next: NextFunction
       return res.status(403).json({ message: "Invalid API key" });
     }
 
-    let limit = 10; // Free plan
+    let limit = 20; // Free plan
 
     if (user.plan === "basic") limit = 50;
     if (user.plan === "premium") limit = 100;
@@ -46,7 +48,7 @@ export const getCurrentUser = async (req: any, res: Response) => {
   res.json({
     id: req.user._id,
     name: req.user.name,
-    email: req.user.email,
+    email: req.user.email,  
     apiKey: req.user.apiKey,
     plan: req.user.plan
   });
