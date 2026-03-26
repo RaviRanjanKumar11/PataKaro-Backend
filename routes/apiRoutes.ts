@@ -1,6 +1,7 @@
 import express from "express";
 import { apiLimiter } from "../middleware/rateLimiter";
 import { apiKeyAuth, getCurrentUser } from "../middleware/apiKeyAuth";
+import { requireLoginOrApiKey } from "../middleware/authMiddleware";
 import {
   getIfscDetails,
   getPincodeDetails,
@@ -18,8 +19,8 @@ import {
 
 const router = express.Router();
 router.use(apiLimiter);
-router.get("/me", getCurrentUser);
-router.get("/ifsc",apiKeyAuth, getIfscDetails);
+router.get("/me", requireLoginOrApiKey, getCurrentUser);
+router.get("/ifsc", apiKeyAuth, getIfscDetails);
 router.get("/pincode",apiKeyAuth, getPincodeDetails);
 router.get("/ip",apiKeyAuth, getIpInfo);
 router.get("/exchange",apiKeyAuth, getExchangeRates);

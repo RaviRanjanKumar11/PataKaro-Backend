@@ -2,22 +2,27 @@ import { Request, Response, NextFunction } from "express";
 import User from "../models/User";
 
 export const apiKeyAuth = async (req: Request, res: Response, next: NextFunction) => {
-  console.log("API KEY HEADER:", req.headers["x-api-key"]);
   try {
     const apiKeyHeader = req.headers["x-api-key"];
-    
 
     if (!apiKeyHeader) {
       return res.status(401).json({ message: "API key required" });
     }
 
-    const apiKey = Array.isArray(apiKeyHeader) ? apiKeyHeader[0] : apiKeyHeader;
+    const apiKey = (Array.isArray(apiKeyHeader) ? apiKeyHeader[0] : apiKeyHeader)?.toString().trim();
+
+    if (!apiKey || apiKey.toLowerCase() === "undefined" || apiKey.toLowerCase() === "null") {
+      return res.status(401).json({ message: "Valid API key required" });
+    }
 
     const user: any = await User.findOne({ apiKey });
 
     if (!user) {
       return res.status(403).json({ message: "Invalid API key" });
     }
+
+    // Attach user to request for downstream handlers if needed
+    (req as any).user = user;
 
     let limit = 20; // Free plan
 
@@ -35,6 +40,7 @@ export const apiKeyAuth = async (req: Request, res: Response, next: NextFunction
 
     next();
   } catch (error) {
+    console.error("apiKeyAuth error:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
